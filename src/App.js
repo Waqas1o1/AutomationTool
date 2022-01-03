@@ -118,4 +118,5 @@ const mapDispatchToProps = (dispatch) => {
     onLoad: () => dispatch(authCheckState()),
   };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(App);
