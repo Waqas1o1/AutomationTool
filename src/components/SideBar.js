@@ -39,7 +39,7 @@ import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import MenuIcon from "@material-ui/icons/Menu";
 import MeetingRoomOutlinedIcon from "@material-ui/icons/MeetingRoomOutlined";
 import { connect } from "react-redux";
-const drawerWidth = 300;
+const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
   root: {
