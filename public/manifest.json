@@ -1,24 +1,15 @@
 {
-  "name": "Automation App",
-  "short_name": "Automation Tools",
-  "lang": "en-US",
-  "orientation": "any",
-  "start_url": "/",
-  "purpose": "any maskable",
-  "background_color": "#131212",
-  "theme_color" : "#f69435",
-  "display": "standalone",
-  "description": "A App Developed By Technoventive Solutions.This app is developed under the conditions of Hafiz (ptv.limited) company.Copy right reserved by Technoventive solutions 2021",
+  "short_name": "Automation App",
+  "name": "Automation Tool",
   "icons": [
     {
-      "src": "logo192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "logo512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
     }
-  ]
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
 }
