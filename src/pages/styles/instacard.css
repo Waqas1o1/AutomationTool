@@ -1,0 +1,82 @@
+/* @import url("https://fonts.googleapis.com/css?family=Roboto:400,700");
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  font-family: "Roboto", sans-serif;
+  background-color: #fafafa;
+  font-size: 14px;
+  display: flex;
+  min-height: 720px;
+  margin: 24px;
+  justify-content: center;
+  align-items: center;
+  line-height: 18px;
+} */
+
+.card {
+  background-color: #fff;
+  width: 250px;
+  border: 1px solid #e6e6e6;
+}
+.card .commentInput {
+  display: flex;
+  align-items: center;
+}
+.card .commentInput img {
+  width: 32px;
+  padding: 9px 8px;
+}
+.card .commentInput p {
+  resize: none;
+  border: none;
+  margin: 16px;
+  width: calc(100% - 88px);
+  height: 18px;
+}
+.card .commentInput textarea:focus {
+  outline: none !important;
+}
+.card .postImage {
+  width: 100%;
+}
+.card .username {
+  padding: 16px;
+  font-weight: 700;
+  color: #262626;
+  display: flex;
+  align-items: center;
+}
+.card .username p {
+    padding-left: 8px;
+}
+.card .username p span {
+  padding-left: 10px;
+  font-size: 12px;
+}
+.card .username img {
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+}
+.card .status {
+  border-bottom: 1px solid #f2f2f2;
+  padding: 16px;
+}
+.card .status b {
+  color: #262626;
+}
+.card .status .like {
+  margin: 8px;
+}
+.card .status .like img {
+  padding: 8px;
+  width: 24px;
+}
+.card .status .like span {
+    font-weight: 700;
+    color: rgb(243, 38, 38);
+
+}
