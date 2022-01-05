@@ -18,6 +18,7 @@ import AccountStatus from "./pages/AccountsManagement/AcccountStatus";
 import AccountPurpose from "./pages/AccountsManagement/AccountPurpose";
 import Accounts from "./pages/AccountsManagement/Accounts";
 import { useEffect } from "react";
+import KeywordAssignments from "./pages/ToolsManagement/KeywordAssignments";
 
 const theme = createTheme({
   palette: {
@@ -99,6 +100,10 @@ function App(props) {
               </Route>
               <Route exact path="/accounts">
                 <Accounts />
+              </Route>
+              {/* Tools Management */}
+              <Route exact path="/assginkeyords">
+                <KeywordAssignments />
               </Route>
             </Body>
           ) : null}

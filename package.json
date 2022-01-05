@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@datepicker-react/styled": "^2.8.4",
     "@material-ui/core": "^4.12.3",
     "@material-ui/data-grid": "^4.0.0-alpha.37",
     "@material-ui/icons": "^4.11.2",
@@ -14,6 +15,7 @@
     "axios": "^0.24.0",
     "material-ui-chip-input": "^1.1.0",
     "react": "^17.0.2",
+    "react-calendar": "^3.5.0",
     "react-dom": "^17.0.2",
     "react-loading-overlay": "^1.0.1",
     "react-redux": "^7.2.6",

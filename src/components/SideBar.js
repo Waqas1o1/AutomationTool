@@ -16,6 +16,7 @@ import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 import RemoveFromQueueIcon from "@material-ui/icons/RemoveFromQueue";
 import LockOpenSharpIcon from "@material-ui/icons/LockOpenSharp";
 import { authLogout } from "../store/actions/actions.js";
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import {
   Breadcrumbs,
   Collapse,
@@ -38,6 +39,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import MenuIcon from "@material-ui/icons/Menu";
 import MeetingRoomOutlinedIcon from "@material-ui/icons/MeetingRoomOutlined";
+import WidgetsIcon from "@material-ui/icons/Widgets";
 import { connect } from "react-redux";
 const drawerWidth = 250;
 
@@ -143,6 +145,7 @@ function ResponsiveDrawer(props) {
   const [collapsUserManager, setCollapsUserManager] = React.useState(false);
   const [collapsAccountManager, setCollapsAccountManager] =
     React.useState(false);
+  const [collapsTools, setCollapsTools] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -299,6 +302,26 @@ function ResponsiveDrawer(props) {
           </Link>
         </List>
       </Collapse>
+      {/* Tools */}
+      <ListItem button onClick={() => setCollapsTools(!collapsTools)}>
+        <ListItemIcon style={{ color: "#FFF" }}>
+          <WidgetsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Tools Manager" />
+        {collapsTools ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={collapsTools} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <Link to="/assginkeyords" className={classes.Link}>
+            <ListItem button key={"AccountType"} className={classes.listItem}>
+              <ListItemIcon>
+                <AssignmentIcon style={{ color: "#FFF" }} />
+              </ListItemIcon>
+              <ListItemText primary={"Assign Keywords"} />
+            </ListItem>
+          </Link>
+        </List>
+      </Collapse>
     </div>
   );
 
@@ -311,7 +334,7 @@ function ResponsiveDrawer(props) {
       <HideOnScroll {...props}>
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar variant="dense">
-            <div style={{flex:1}}>
+            <div style={{ flex: 1 }}>
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
