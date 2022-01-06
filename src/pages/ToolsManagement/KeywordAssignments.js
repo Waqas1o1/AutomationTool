@@ -11,7 +11,6 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
-  FormLabel,
   Grid,
   Input,
   InputAdornment,
@@ -21,17 +20,27 @@ import {
   RadioGroup,
   Slide,
   Typography,
+  Zoom,
 } from "@material-ui/core";
+import request from "../../axios/config";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import SearchIcon from "@material-ui/icons/Search";
+import PlusOneIcon from "@material-ui/icons/PlusOne";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 const useStyles = makeStyles((theme) => ({
   calender: {
     "&.react-calendar": {
-      width: "100%",
+      // width: "100%",
+      borderRadius: "20px",
+      boxShadow:
+        "0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)",
     },
     "& abbr": {
       fontFamily: "cursive",
+    },
+    "& button span": {
+      fontWeight: 700,
     },
   },
   detailBox: {
@@ -43,45 +52,61 @@ const useStyles = makeStyles((theme) => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+const TransitionFad = React.forwardRef(function Transition(props, ref) {
+  return <Zoom direction="up" ref={ref} {...props} />;
+});
+
 export default function KeywordAssignments() {
   const [date, setDateChange] = useState(new Date());
   const [DetailBox, setDetailBox] = useState(false);
   const [searchMode, setSearchMode] = React.useState(true);
   const [searchType, setSearchType] = React.useState("Libraries");
+  const [changesBox, ShowChanges] = useState(false);
+
+  const [hashtags, setHashtags] = useState([]);
+  const [hashtagsAdded, AddHashtags] = useState([]);
+  const [hashtagsDeleted, DeletedHashtags] = useState([]);
+
   const hashtagSearchREF = useRef(null);
-  let hash = [
-    { key: 0, label: "Angular" },
-    { key: 1, label: "jQuery" },
-    { key: 2, label: "Polymer" },
-    { key: 3, label: "React" },
-    { key: 4, label: "Vue.js" },
-    { key: 5, label: "Angular5" },
-    { key: 6, label: "jQuery6" },
-    { key: 7, label: "Polymer7" },
-    { key: 8, label: "React8" },
-    { key: 9, label: "Vue.js9" },
-    { key: 10, label: "Angular10" },
-    { key: 11, label: "jQuery11" },
-    { key: 12, label: "Polymer12" },
-    { key: 13, label: "React13" },
-    { key: 14, label: "Vue.js14" },
-  ];
-  const [hashtags, setHashtags] = useState(hash);
+
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
   const handleOnDayClick = (v) => {
+    setSearchMode(true);
+    FetchHashtagsFromDate();
     setDetailBox(true);
   };
-  const handleHashTagUpdate = (v) => {
-    executeHashtagScroll();
+  const handleHashTagUpdate = async (v) => {
     setDetailBox(false);
     setSearchMode(false);
+    await sleep(500);
+    executeHashtagScroll();
   };
   const hanleHashTagDelete = (tage) => {
-    // setChipData((chips) => chips.filter((chip) => chip.key !== tage.key));
+    let new_list = hashtags.filter((chip) => chip.id !== tage.id);
+    setHashtags(new_list);
+    DeletedHashtags([...hashtagsDeleted, tage.tag]);
   };
   const handleSearchTypeChange = (event) => {
     setSearchType(event.target.value);
   };
-  const executeHashtagScroll = () => hashtagSearchREF.current.scrollIntoView();
+  const handleAddHashTagItems = (v) => {
+    const unique = [...new Set([...hashtagsAdded, v])];
+    AddHashtags(unique);
+    const new_list = hashtags.filter((tag) => tag.tag !== v);
+    setHashtags(new_list);
+  };
+  const executeHashtagScroll = () =>
+    hashtagSearchREF.current.scrollIntoView({ behavior: "smooth" });
+  // APi scalling
+  async function FetchHashtagsFromDate() {
+    // await request.get()
+    let send_date = `${date.getFullYear()}-01-${date.getDate()}`;
+    await request.get(`insta/filterHashtags/${send_date}/`).then((res) => {
+      setHashtags(res.data.data);
+    });
+  }
   const classes = useStyles();
   return (
     <Grid container spacing={3} direction="column">
@@ -91,9 +116,6 @@ export default function KeywordAssignments() {
         </Typography>
       </Grid>
       <Grid item>
-        <Typography variant="subtitle1" color="secondary">
-          Calender
-        </Typography>
         <Calendar
           className={classes.calender}
           onChange={setDateChange}
@@ -119,8 +141,8 @@ export default function KeywordAssignments() {
             <Paper className={classes.detailBox}>
               <Grid container spacing={1} justifyContent="center">
                 {hashtags.map((data) => (
-                  <Grid item key={data.label}>
-                    <Chip label={data.label} />
+                  <Grid item key={data.id}>
+                    <Chip label={data.tag} />
                   </Grid>
                 ))}
               </Grid>
@@ -176,24 +198,115 @@ export default function KeywordAssignments() {
           </Grid>
           <Grid item container component={Paper} spacing={3}>
             {hashtags.map((data) => (
-              <Grid item key={data.key}>
-                <Chip
-                  label={data.label}
-                  className={classes.chip}
-                  onDelete={() => {
-                    hanleHashTagDelete(data);
-                  }}
-                />
-              </Grid>
+              <>
+                <Grid item key={data.id}>
+                  <Chip
+                    color="primary"
+                    label={data.tag}
+                    className={classes.chip}
+                    onDelete={() => {
+                      hanleHashTagDelete(data);
+                    }}
+                  />
+                </Grid>
+                {searchType === "HashTags" ? (
+                  <Grid item key={`${data.id} ${data.tag}`}>
+                    <Chip
+                      icon={<PlusOneIcon />}
+                      color="secondary"
+                      clickable
+                      onClick={() => handleAddHashTagItems(data.tag)}
+                      label={data.tag}
+                      className={classes.chip}
+                    />
+                  </Grid>
+                ) : undefined}
+              </>
             ))}
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" fullWidth color="primary">
-              See Changes
+            <Button
+              variant="contained"
+              startIcon={<VisibilityIcon />}
+              fullWidth
+              color="primary"
+              onClick={() => ShowChanges(true)}
+            >
+              Changes
             </Button>
           </Grid>
         </Grid>
       </div>
+      {/* show Changes */}
+      <Dialog
+        open={changesBox}
+        TransitionComponent={TransitionFad}
+        transitionDuration={1000}
+        keepMounted
+        onClose={() => setDetailBox(false)}
+        aria-labelledby="ChangeslDialog"
+      >
+        <DialogTitle id="ChangeslDialog">
+          Hash Tags In {date.toLocaleDateString()}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="Changes Hashtags">
+            <Paper className={classes.detailBox}>
+              <Grid container spacing={1} justifyContent="center">
+                <Grid container item spacing={1} xs={6} justifyContent="center">
+                  <Grid item xs={12}>
+                    <Typography color="primary" variant="body1" align="center">
+                      Added Hashtags
+                    </Typography>
+                  </Grid>
+                  {hashtagsAdded.map((data) => (
+                    <Grid item key={data}>
+                      <Chip
+                        color="primary"
+                        label={data}
+                        onDelete={() => {
+                          hanleHashTagDelete(data);
+                        }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+                <Divider orientation="vertical" flexItem />
+                <Grid container spacing={1} item xs={6} justifyContent="center">
+                  <Grid item xs={12}>
+                    <Typography
+                      color="secondary"
+                      variant="body1"
+                      align="center"
+                    >
+                      Deleted Hashtags
+                    </Typography>
+                  </Grid>
+                  {hashtagsDeleted.map((data) => (
+                    <Grid item key={data}>
+                      <Chip
+                        color="secondary"
+                        label={data}
+                        onDelete={() => {
+                          hanleHashTagDelete(data);
+                        }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+            </Paper>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => ShowChanges(false)} color="primary">
+            Update
+          </Button>
+          <Button onClick={() => ShowChanges(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 }
